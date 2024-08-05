@@ -1,7 +1,10 @@
+import { cookies } from "next/headers";
+
 export default async function Home() {
+  cookies();
   return (
     <main>
-      <h1>Welcome To Next.js</h1>
+      <div>{Date.now()}</div>
     </main>
   );
 }
