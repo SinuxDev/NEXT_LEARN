@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
-const inter = Inter({ subsets: ["latin"] });
+const fontSans = FontSans({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "Sample Next.js App",
@@ -20,7 +21,12 @@ export default function RootLayout({
   const isAdmin: boolean = false;
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable
+        )}
+      >
         <nav>
           <ul className="flex justify-between px-4  bg-blue-600 text-white gap-2">
             <li>
@@ -34,7 +40,6 @@ export default function RootLayout({
           </ul>
         </nav>
         {children}
-        {isAdmin && profile}
       </body>
     </html>
   );
