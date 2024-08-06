@@ -1,5 +1,6 @@
 // import { cookies } from "next/headers";
 
+import PostButton from "@/component/post-button";
 import createPost from "@/server/actions/create-post";
 import getPosts from "@/server/actions/get-post";
 
@@ -25,8 +26,14 @@ export default async function Home() {
         <h1>Hello</h1>
       )}
       <form action={createPost} className="bg-green-600 p-2 mx-auto">
-        <input type="text" name="title" className="bg-black" required />
-        <button type="submit">Submit</button>
+        <input
+          type="text"
+          name="title"
+          className="bg-black"
+          placeholder="title"
+          required
+        />
+        <PostButton />
       </form>
     </main>
   );
