@@ -1,6 +1,9 @@
 import { auth } from "@/server/auth";
 import Logo from "@/components/navigation/logo";
 import UserButton from "./user-button";
+import { Button } from "../ui/button";
+import Link from "next/link";
+import { Mail } from "lucide-react";
 
 export default async function Nav() {
   const session = await auth();
@@ -18,7 +21,11 @@ export default async function Nav() {
                 <UserButton expires={session?.expires} user={session?.user} />
               </>
             ) : (
-              <>Lee Type </>
+              <Button asChild variant={"secondary"}>
+                <Link href="/api/auth/signin">
+                  <Mail className="mr-2 h-4 w-4" /> Login with Email
+                </Link>
+              </Button>
             )}
           </li>
         </ul>
