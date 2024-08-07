@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
+import Nav from "@/components/navigation/nav";
 
 const fontSans = FontSans({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -18,7 +18,6 @@ export default function RootLayout({
   children: React.ReactNode;
   profile: React.ReactNode;
 }>) {
-  const isAdmin: boolean = false;
   return (
     <html lang="en">
       <body
@@ -27,18 +26,7 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <nav>
-          <ul className="flex justify-between px-4  bg-blue-600 text-white gap-2">
-            <li>
-              {" "}
-              <Link href={"/"}>Home</Link>{" "}
-            </li>
-            <li>
-              {" "}
-              <Link href={"/about"}>About</Link>{" "}
-            </li>
-          </ul>
-        </nav>
+        <Nav />
         {children}
       </body>
     </html>
