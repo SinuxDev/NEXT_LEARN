@@ -9,11 +9,13 @@ export default async function Nav() {
   const session = await auth();
 
   return (
-    <header className="bg-slate-500 py-4 px-4">
+    <header className="border-gray-900/10 py-6 px-4 w-full">
       <nav>
         <ul className="flex justify-between">
           <li>
-            <Logo />
+            <Link href={"/"}>
+              <Logo />
+            </Link>
           </li>
           <li>
             {session ? (
@@ -22,7 +24,7 @@ export default async function Nav() {
               </>
             ) : (
               <Button asChild variant={"secondary"}>
-                <Link href="/api/auth/signin">
+                <Link href="/auth/login">
                   <Mail className="mr-2 h-4 w-4" /> Login with Email
                 </Link>
               </Button>
