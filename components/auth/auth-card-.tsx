@@ -29,9 +29,13 @@ export const AuthCard = ({
         <CardTitle>{cardTitle}</CardTitle>
       </CardHeader>
       <CardContent>{children}</CardContent>
-      {showSocials && (
+      {showSocials ? (
         <CardFooter>
-          <Socials />
+          <Socials isLogin={true} />
+        </CardFooter>
+      ) : (
+        <CardFooter>
+          <Socials isLogin={false} />
         </CardFooter>
       )}
       <CardFooter>

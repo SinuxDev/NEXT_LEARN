@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 
-export default function Socials() {
+export default function Socials({ isLogin }: { isLogin: boolean }) {
   return (
     <div className="flex flex-col items-center w-full gap-4">
       <Button
@@ -18,7 +18,7 @@ export default function Socials() {
           })
         }
       >
-        <p>Sigin with Google</p>
+        <p> {isLogin ? "Sigin with Google" : "Register with Google"} </p>
         <FcGoogle className="w-5 h-5" />
       </Button>
 
@@ -32,7 +32,7 @@ export default function Socials() {
           })
         }
       >
-        <p>Sigin with Github</p>
+        <p>{isLogin ? "Signin with Github" : "Register with Github"} </p>
         <FaGithub className="w-5 h-5" />
       </Button>
     </div>
