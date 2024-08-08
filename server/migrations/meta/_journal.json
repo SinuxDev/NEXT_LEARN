@@ -15,6 +15,13 @@
       "when": 1722973908735,
       "tag": "0001_nebulous_odin",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1723144129910,
+      "tag": "0002_aromatic_agent_zero",
+      "breakpoints": true
     }
   ]
 }
