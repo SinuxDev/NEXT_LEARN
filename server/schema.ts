@@ -46,3 +46,17 @@ export const accounts = pgTable(
     }),
   })
 );
+
+export const email_verificationTokens = pgTable(
+  "email_verificationToken",
+  {
+    identifier: text("id").notNull(),
+    token: text("token").notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
+  },
+  (verificationToken) => ({
+    compositePk: primaryKey({
+      columns: [verificationToken.identifier, verificationToken.token],
+    }),
+  })
+);
