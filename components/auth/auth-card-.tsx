@@ -26,7 +26,9 @@ export const AuthCard = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{cardTitle}</CardTitle>
+        <CardTitle className="mx-auto font-bold text-3xl">
+          {cardTitle}
+        </CardTitle>
       </CardHeader>
       <CardContent>{children}</CardContent>
       {showSocials ? (
