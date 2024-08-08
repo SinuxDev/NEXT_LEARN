@@ -14,7 +14,11 @@ export const BackButton = ({
 }: BackButtonProps) => {
   return (
     <>
-      <Button className="font-medium w-full text-lg py-6" asChild>
+      <Button
+        className="font-medium w-full text-base py-6"
+        variant={"link"}
+        asChild
+      >
         <Link aria-label={backButtonLabel} href={backButtonHref}>
           {backButtonLabel}
         </Link>
