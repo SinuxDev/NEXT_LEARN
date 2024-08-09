@@ -25,7 +25,7 @@ export default async function Nav() {
             ) : (
               <Button asChild variant={"secondary"}>
                 <Link href="/auth/login">
-                  <Mail className="mr-2 h-4 w-4" /> Login with Email
+                  <Mail className="mr-2 h-4 w-4" /> Login
                 </Link>
               </Button>
             )}
