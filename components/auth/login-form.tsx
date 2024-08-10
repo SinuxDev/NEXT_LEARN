@@ -20,13 +20,22 @@ import { emailSignIn } from "@/server/actions/email-signin";
 import { useAction } from "next-safe-action/hooks";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { FormSuccessMsg } from "./form-success";
+import { FormErrorMsg } from "./form-error";
 
 export const LoginForm = () => {
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
 
   const { execute, status } = useAction(emailSignIn, {
     onSuccess(data) {
-      console.log(data);
+      if (data.data?.error) {
+        setError(data.data.error);
+      }
+
+      if (data.data?.success) {
+        setSuccess(data.data.success);
+      }
     },
   });
 
@@ -89,6 +98,10 @@ export const LoginForm = () => {
                 </FormItem>
               )}
             />
+
+            <FormSuccessMsg message={success} />
+
+            <FormErrorMsg message={error} />
 
             <Button size={"sm"} variant={"link"} asChild>
               <Link href={"/auth/reset"}>Forget your password</Link>
