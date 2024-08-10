@@ -7,15 +7,24 @@ import { EmailTemplate } from "@/components/email-template";
 const resend = new Resend(process.env.RESEND_API_KEY);
 const domain = getBaseURL();
 
-export const sendVerificationEmail = async (email: string, token: string) => {
-  const confirmLink = `${domain}/auth/new-verify-email?token=${token}`;
+export const sendVerificationEmail = async (
+  email: string,
+  token: string,
+  isPasswordReset?: boolean
+) => {
+  const confirmLink = isPasswordReset
+    ? `${domain}/auth/reset-password?token=${token}`
+    : `${domain}/auth/new-verify-email?token=${token}`;
 
   try {
     const { data, error } = await resend.emails.send({
       from: "GETSHINLOVE <shin@resend.dev>",
       to: [`${email}`],
-      subject: "Verify your email",
-      react: EmailTemplate({ domainLink: confirmLink }),
+      subject: "Check it's you",
+      react: EmailTemplate({
+        domainLink: confirmLink,
+        forgetPass: isPasswordReset,
+      }),
     });
 
     if (error) {
