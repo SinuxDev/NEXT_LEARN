@@ -21,3 +21,16 @@ export const RegisterSchema = z.object({
     message: "Name must be at least 4 characters long",
   }),
 });
+
+export const NewPasswordSchema = z.object({
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters long",
+  }),
+  token: z.string().nullable().optional(),
+});
+
+export const PasswordForgetEmailSchema = z.object({
+  email: z.string().email({
+    message: "Invalid email address",
+  }),
+});
