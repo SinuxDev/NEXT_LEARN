@@ -2,7 +2,7 @@
 
 import { db } from "@/server/index";
 import { arrayContains, eq } from "drizzle-orm";
-import { email_verificationTokens, users } from "../schema";
+import { email_verificationTokens, NewPasswordToken, users } from "../schema";
 
 export const getVerificationTokenByEmail = async (email: string) => {
   try {
@@ -84,4 +84,74 @@ export const newEmailVerification = async (token: string) => {
     .where(eq(email_verificationTokens.email, checkTokenExists.email));
 
   return { success: "Email verified" };
+};
+
+export const getPasswordResetTokens = async ({ email }: { email: string }) => {
+  try {
+    const ResetTokenFromDB = await db.query.NewPasswordToken.findFirst({
+      where: eq(NewPasswordToken.email, email),
+    });
+
+    if (!ResetTokenFromDB) {
+      return null;
+    }
+
+    return ResetTokenFromDB;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const generatePasswordResetToken = async ({
+  email,
+}: {
+  email: string;
+}) => {
+  const NewToken = crypto.randomUUID();
+  const expiresToken = new Date(new Date().getTime() + 1000 * 3600);
+
+  const existingToken = await getPasswordResetTokens({ email });
+
+  if (existingToken) {
+    await db
+      .delete(NewPasswordToken)
+      .where(eq(NewPasswordToken.email, existingToken.email));
+  }
+
+  const newPasswordToken = await db
+    .insert(NewPasswordToken)
+    .values({
+      token: NewToken,
+      expires: expiresToken,
+      email,
+    })
+    .returning();
+
+  return newPasswordToken;
+};
+
+export const newPasswordVerification = async (token: string) => {
+  const checkTokenExists = await db.query.NewPasswordToken.findFirst({
+    where: eq(NewPasswordToken.token, token),
+  });
+
+  if (!checkTokenExists) {
+    return { error: "Token not found" };
+  }
+
+  const expiresToken = new Date(checkTokenExists.expires) < new Date();
+
+  if (expiresToken) {
+    return { error: "Token expired" };
+  }
+
+  const exisitingUser = await db.query.users.findFirst({
+    where: eq(users.email, checkTokenExists.email),
+  });
+
+  if (!exisitingUser) {
+    return { error: "User not found! Email does not exists" };
+  }
+
+  return { success: "Token is valid" };
 };
