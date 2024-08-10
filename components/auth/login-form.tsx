@@ -104,7 +104,9 @@ export const LoginForm = () => {
             <FormErrorMsg message={error} />
 
             <Button size={"sm"} variant={"link"} asChild>
-              <Link href={"/auth/reset"}>Forget your password</Link>
+              <Link href={"/auth/forget-password-email-input"}>
+                Forget your password
+              </Link>
             </Button>
 
             <Button
