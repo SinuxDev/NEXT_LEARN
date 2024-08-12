@@ -36,7 +36,7 @@ export default function UserButton({ user }: Session) {
         setChecked(true);
         break;
       default:
-        setChecked(true);
+        setChecked(false);
     }
   }
 
