@@ -2,7 +2,7 @@
 
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,10 +22,12 @@ import {
 import { useTheme } from "next-themes";
 import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
+import { useRouter } from "next/navigation";
 
 export default function UserButton({ user }: Session) {
   const { setTheme, theme } = useTheme();
   const [checked, setChecked] = useState<boolean>(false);
+  const router = useRouter();
 
   function setSwtichTheme() {
     switch (theme) {
@@ -73,14 +75,20 @@ export default function UserButton({ user }: Session) {
           </span>
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="group py-2 font-medium cursor-pointer transition-all duration-500">
+        <DropdownMenuItem
+          onClick={() => router.push("/dashboard/orders")}
+          className="group py-2 font-medium cursor-pointer transition-all duration-500"
+        >
           <TruckIcon
             className="mr-3 group-hover:translate-x-2 transition-all duration-300 ease-in-out"
             size={14}
           />{" "}
           My Orders
         </DropdownMenuItem>
-        <DropdownMenuItem className="group py-2 font-medium cursor-pointer transition-all duration-500">
+        <DropdownMenuItem
+          onClick={() => router.push("/dashboard/settings")}
+          className="group py-2 font-medium cursor-pointer transition-all duration-500"
+        >
           <Settings
             size={14}
             className="mr-3 group-hover:rotate-180 transition-all duration-300 ease-in-out"
