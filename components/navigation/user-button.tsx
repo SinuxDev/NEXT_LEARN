@@ -7,11 +7,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Suspense } from "react";
 import Image from "next/image";
 import {
   DollarSign,
@@ -21,9 +19,27 @@ import {
   Sun,
   TruckIcon,
 } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useState } from "react";
+import { Switch } from "@/components/ui/switch";
 
 export default function UserButton({ user }: Session) {
-  console.log(user);
+  const { setTheme, theme } = useTheme();
+  const [checked, setChecked] = useState<boolean>(false);
+
+  function setSwtichTheme() {
+    switch (theme) {
+      case "light":
+        setChecked(false);
+        break;
+      case "dark":
+        setChecked(true);
+        break;
+      default:
+        setChecked(true);
+    }
+  }
+
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
@@ -71,15 +87,36 @@ export default function UserButton({ user }: Session) {
           />{" "}
           Settings
         </DropdownMenuItem>
-        <DropdownMenuItem className="py-2 font-medium cursor-pointer transition-all duration-500">
-          <div className="flex items-center">
-            <Sun size={14} />
-            <Moon size={14} />
-            <p>
-              Theme <span>theme</span>{" "}
-            </p>
-          </div>
-        </DropdownMenuItem>
+        {theme && (
+          <DropdownMenuItem className="py-2 font-medium cursor-pointer transition-all duration-500 ease-in-out">
+            <div
+              className="flex items-center group"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="relative flex mr-3">
+                <Sun
+                  size={14}
+                  className="group-hover:text-yellow-400 absolute group-hover:rotate-180 dark:scale-0 dark:-rotate-90  transition-all duration-500 ease-in-out"
+                />
+                <Moon
+                  size={14}
+                  className="group-hover:text-blue-600 dark:scale-100 scale-0 "
+                />
+              </div>
+              <p className="dark:text-blue-500 text-secondary-foreground/75">
+                {theme[0].toUpperCase() + theme.slice(1)} Mode
+              </p>
+              <Switch
+                className="scale-75 ml-2"
+                checked={checked}
+                onCheckedChange={(e) => {
+                  setChecked((prev) => !prev);
+                  setTheme(e ? "dark" : "light");
+                }}
+              />
+            </div>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem className="group py-2 font-medium cursor-pointer transition-all duration-500">
           <DollarSign
             size={14}

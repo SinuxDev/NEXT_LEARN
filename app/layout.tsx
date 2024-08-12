@@ -20,7 +20,7 @@ export default function RootLayout({
   profile: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
           "px-6 md:px-24 max-w-7xl mx-auto font-sans antialiased",
