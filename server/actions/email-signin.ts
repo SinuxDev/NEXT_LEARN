@@ -4,9 +4,16 @@ import { LoginSchema } from "@/types/types";
 import { createSafeActionClient } from "next-safe-action";
 import { db } from "@/server/index";
 import { eq } from "drizzle-orm";
-import { users } from "../schema";
-import { generateEmailVerificationToken } from "./tokens";
-import { sendVerificationEmail } from "./send-email";
+import { TwoFactorTokens, users } from "../schema";
+import {
+  generateEmailVerificationToken,
+  generateTwoFactorToken,
+  getTwoFactorTokenByEmail,
+} from "./tokens";
+import {
+  sendTwoFactorVerificationEmail,
+  sendVerificationEmail,
+} from "./send-email";
 import { signIn } from "../auth";
 import { AuthError } from "next-auth";
 
@@ -35,6 +42,48 @@ export const emailSignIn = actionClient
         );
 
         return { success: "Email verification sent" };
+      }
+
+      if (existingUser.twoFactorEnabled && existingUser.email) {
+        if (code) {
+          const twoFactorToken = await getTwoFactorTokenByEmail(
+            existingUser.email
+          );
+
+          if (!twoFactorToken) {
+            return { error: "Token not found" };
+          }
+
+          if (twoFactorToken.token !== code) {
+            return { error: "Invalid token" };
+          }
+
+          const isTokenExpired = new Date(twoFactorToken.expires) < new Date();
+
+          if (isTokenExpired) {
+            return { error: "Token expired" };
+          }
+
+          await db
+            .delete(TwoFactorTokens)
+            .where(eq(TwoFactorTokens.identifier, twoFactorToken.identifier));
+        } else {
+          //Generate new token
+          const GenerateTwoFactorToken = await generateTwoFactorToken(
+            existingUser.email
+          );
+
+          if (!GenerateTwoFactorToken) {
+            return { error: "Failed to generate two factor token" };
+          }
+
+          await sendTwoFactorVerificationEmail(
+            GenerateTwoFactorToken[0].email,
+            GenerateTwoFactorToken[0].token
+          );
+
+          return { twoFactor: "Two factor token sent" };
+        }
       }
 
       await signIn("credentials", {

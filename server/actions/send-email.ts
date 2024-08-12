@@ -36,3 +36,25 @@ export const sendVerificationEmail = async (
     return Response.json({ error }, { status: 500 });
   }
 };
+
+export const sendTwoFactorVerificationEmail = async (
+  email: string,
+  token: string
+) => {
+  try {
+    const { data, error } = await resend.emails.send({
+      from: "GETSHINLOVE <shin@resend.dev>",
+      to: [`${email}`],
+      subject: "Your two factor token",
+      html: `<p>Here is your two factor token: ${token}</p>`,
+    });
+
+    if (error) {
+      return Response.json({ error }, { status: 500 });
+    }
+
+    return Response.json(data);
+  } catch (error) {
+    return Response.json({ error }, { status: 500 });
+  }
+};

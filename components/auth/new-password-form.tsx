@@ -55,8 +55,6 @@ export default function NewPasswordForm() {
     setSuccess(isValid.success);
   }, []);
 
-  console.log(tokenValid, newPasswordVerification, NewPassword);
-
   useEffect(() => {
     if (token) {
       validateToken(token as string);
