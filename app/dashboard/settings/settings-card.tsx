@@ -31,6 +31,7 @@ import { FormSuccessMsg } from "@/components/auth/form-success";
 import { useState } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { settingsHandler } from "@/server/actions/settings-handler";
+import { UploadButton } from "@/app/api/uploadthing/uploadthing";
 
 type SettingsProps = {
   session: Session;
@@ -119,11 +120,37 @@ export default function SettingCard(session: SettingsProps) {
                         alt="User Image"
                       />
                     )}
+                    <UploadButton
+                      className="scale-75 ut-button:ring-primary ut-button:bg-primary/75 hover:ut-button:bg-primary/100 ut:button:transition-all ut:button:duration-500 ut-label:hidden ut-allowed-content:hidden"
+                      endpoint="avatarUploader"
+                      onUploadBegin={() => {
+                        setAvatarUploading(true);
+                      }}
+                      onUploadError={(error: Error) => {
+                        form.setError("image", {
+                          type: "validate",
+                          message: error.message,
+                        });
+                        setAvatarUploading(false);
+                        return;
+                      }}
+                      onClientUploadComplete={(res) => {
+                        form.setValue("image", res[0].url!);
+                        setAvatarUploading(false);
+                        return;
+                      }}
+                      content={{
+                        button({ ready }) {
+                          return ready ? "Upload" : "Uploading...";
+                        },
+                      }}
+                    />
                   </div>
                   <FormControl>
                     <Input
+                      placeholder="User Image"
                       disabled={status === "executing"}
-                      type="file"
+                      type="hidden"
                       {...field}
                     />
                   </FormControl>
