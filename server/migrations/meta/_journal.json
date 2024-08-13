@@ -71,6 +71,13 @@
       "when": 1723497888343,
       "tag": "0009_smart_toro",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1723575982834,
+      "tag": "0010_equal_retro_girl",
+      "breakpoints": true
     }
   ]
 }
