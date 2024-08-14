@@ -11,17 +11,11 @@ import {
   Strikethrough,
 } from "lucide-react";
 import { useFormContext } from "react-hook-form";
-import { Placeholder } from "@tiptap/extension-placeholder";
 
 const Tiptap = ({ val }: { val: string }) => {
   const { setValue } = useFormContext();
   const editor = useEditor({
     extensions: [
-      Placeholder.configure({
-        placeholder: "Start typing your description...",
-        emptyNodeClass:
-          "first:before:text-gray-600 first:before:float-left first:before:content-[attr(data-placeholder)] first:before:pointer-events-none",
-      }),
       StarterKit.configure({
         orderedList: {
           HTMLAttributes: {
@@ -49,6 +43,7 @@ const Tiptap = ({ val }: { val: string }) => {
       },
     },
     content: val,
+    immediatelyRender: false,
   });
 
   return (

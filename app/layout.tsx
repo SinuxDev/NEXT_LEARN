@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Nav from "@/components/navigation/nav";
 import { ThemeProvider } from "@/components/theme-provider";
+import Toaster from "@/components/dashboard/sooner-toast";
 
 const fontSans = FontSans({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -34,6 +35,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Nav />
+          <Toaster />
           {children}
         </ThemeProvider>
       </body>

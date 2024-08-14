@@ -3,14 +3,7 @@
 import { ProductSchema } from "@/types/types";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,12 +17,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { DollarSign } from "lucide-react";
-import Tiptap from "./tiptap";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
 import { createProducts } from "@/server/dashboard/create-products";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import Tiptap from "@/components/dashboard/tiptap";
 
-export default function ProductForm() {
+export default function ProductForm({ val }: { val: string }) {
   const form = useForm<z.infer<typeof ProductSchema>>({
     resolver: zodResolver(ProductSchema),
     defaultValues: {
@@ -40,18 +35,24 @@ export default function ProductForm() {
     mode: "onChange",
   });
 
+  const router = useRouter();
+
   const { execute, status } = useAction(createProducts, {
     onSuccess(data) {
       if (data.data?.error) {
-        console.log(data.data.error);
+        toast.error(data.data.error);
       }
 
       if (data.data?.success) {
-        console.log(data.data.success);
+        router.push("/dashboard/products");
+        toast.success("Product has been created");
       }
     },
-    onError(err) {
-      console.error(err);
+    onExecute(data) {
+      toast.loading("Creating Product");
+    },
+    onError() {
+      toast.error("An error occurred");
     },
   });
 
@@ -91,6 +92,9 @@ export default function ProductForm() {
                   <FormControl>
                     <Tiptap val={field.value} />
                   </FormControl>
+                  <FormDescription>
+                    Write your products description
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
