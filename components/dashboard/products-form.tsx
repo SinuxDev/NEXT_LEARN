@@ -20,9 +20,11 @@ import { DollarSign } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
 import { createProducts } from "@/server/dashboard/create-products";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import Tiptap from "@/components/dashboard/tiptap";
+import { getProduct } from "@/server/dashboard/get-products";
+import { useEffect } from "react";
 
 export default function ProductForm({ val }: { val: string }) {
   const form = useForm<z.infer<typeof ProductSchema>>({
@@ -36,6 +38,33 @@ export default function ProductForm({ val }: { val: string }) {
   });
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const editMode = searchParams.get("id");
+
+  const checkProductExists = async (id: number) => {
+    if (editMode) {
+      const { error, productDoc } = await getProduct(id);
+
+      if (error) {
+        toast.error(error);
+        router.push("/dashboard/products");
+        return;
+      }
+
+      if (productDoc) {
+        form.setValue("title", productDoc.title);
+        form.setValue("description", productDoc.description);
+        form.setValue("price", productDoc.price);
+        form.setValue("id", productDoc.id);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (editMode) {
+      checkProductExists(Number(editMode));
+    }
+  }, [editMode]);
 
   const { execute, status } = useAction(createProducts, {
     onSuccess(data) {
@@ -45,11 +74,17 @@ export default function ProductForm({ val }: { val: string }) {
 
       if (data.data?.success) {
         router.push("/dashboard/products");
-        toast.success("Product has been created");
+        toast.success(data.data.success);
       }
     },
-    onExecute(data) {
-      toast.loading("Creating Product");
+    onExecute() {
+      if (editMode) {
+        toast.loading("Updating product");
+      }
+
+      if (!editMode) {
+        toast.loading("Creating product");
+      }
     },
     onError() {
       toast.error("An error occurred");
@@ -57,14 +92,16 @@ export default function ProductForm({ val }: { val: string }) {
   });
 
   async function onSubmit(values: z.infer<typeof ProductSchema>) {
-    console.log(values);
     execute(values);
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Add Your Product</CardTitle>
+        <CardTitle>
+          {" "}
+          {editMode ? "Update Your Product" : "Add Your Product"}{" "}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -133,7 +170,7 @@ export default function ProductForm({ val }: { val: string }) {
               }
               type="submit"
             >
-              Submit
+              {editMode ? "Update Product" : "Create Product"}
             </Button>
           </form>
         </Form>

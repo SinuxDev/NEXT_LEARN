@@ -4,6 +4,7 @@ import { products } from "../schema";
 import { ProductSchema } from "@/types/types";
 import { db } from "..";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 const action = createSafeActionClient();
 
@@ -32,6 +33,8 @@ export const createProducts = action
           .where(eq(products.id, id))
           .returning();
 
+        revalidatePath("/dashboard/products");
+
         return {
           success: `Product ${updateProduct[0].title} has been updated`,
         };
@@ -45,6 +48,7 @@ export const createProducts = action
           price,
         })
         .returning();
+      revalidatePath("/dashboard/products");
 
       return { success: `Product ${newProduct[0].title} has been created` };
     } catch (err) {
