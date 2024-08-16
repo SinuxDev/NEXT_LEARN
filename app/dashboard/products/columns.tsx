@@ -11,17 +11,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, PlusCircleIcon } from "lucide-react";
 import { deleteProduct } from "@/server/dashboard/delete-product";
 import { toast } from "sonner";
 import { useAction } from "next-safe-action/hooks";
 import Link from "next/link";
+import { VariantsWithImagesTags } from "@/types/infer-types";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import ProductVariant from "./product-variant";
 
 export type ProductColumn = {
   title: string;
   price: number;
   image: string;
-  variants: string[];
+  variants: VariantsWithImagesTags[];
   id: number;
 };
 
@@ -80,6 +89,51 @@ export const columns: ColumnDef<ProductColumn>[] = [
   {
     accessorKey: "variants",
     header: "Variants",
+    cell: ({ row }) => {
+      const variants = row.getValue("variants") as VariantsWithImagesTags[];
+      return (
+        <div className="">
+          {variants.map((variant) => (
+            <div key={variant.id}>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <ProductVariant
+                      productID={variant.productID}
+                      variant={variant}
+                      editMode={true}
+                    >
+                      <div
+                        className="w-5 h-5 rounded-full"
+                        key={variant.id}
+                        style={{
+                          backgroundColor: variant.color,
+                        }}
+                      ></div>
+                    </ProductVariant>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p> {variant.productType} </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          ))}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <ProductVariant editMode={false} productID={row.original.id}>
+                  <PlusCircleIcon className="h-4 w-4" />
+                </ProductVariant>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Add Variant</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "price",
