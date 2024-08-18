@@ -60,6 +60,8 @@ export const InputTags = forwardRef<HTMLInputElement, InputTagsProps>(
 
           <div className="flex">
             <Input
+              {...props}
+              ref={ref}
               className="focus-visible:border-transparent border-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
               placeholder="Add Tags"
               onKeyDown={(e) => {
@@ -83,7 +85,6 @@ export const InputTags = forwardRef<HTMLInputElement, InputTagsProps>(
               onFocus={(e) => setFocused(true)}
               onBlurCapture={(e) => setFocused(false)}
               onChange={(e) => setPendingDataPoint(e.target.value)}
-              {...props}
             />
           </div>
         </motion.div>
