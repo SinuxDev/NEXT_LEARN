@@ -26,7 +26,7 @@ import Tiptap from "@/components/dashboard/tiptap";
 import { getProduct } from "@/server/dashboard/get-products";
 import { useEffect } from "react";
 
-export default function ProductForm({ val }: { val: string }) {
+export default function ProductForm({ val }: { val?: string }) {
   const form = useForm<z.infer<typeof ProductSchema>>({
     resolver: zodResolver(ProductSchema),
     defaultValues: {
