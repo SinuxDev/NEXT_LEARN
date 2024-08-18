@@ -75,7 +75,7 @@ export const ProductSchema = z.object({
 
 export const VariantSchema = z.object({
   productID: z.number(),
-  id: z.number(),
+  id: z.number().optional(),
   editMode: z.boolean(),
   productType: z.string().min(3, {
     message: "Product type must be at least 3 characters long",
