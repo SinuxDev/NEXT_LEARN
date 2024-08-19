@@ -92,7 +92,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
     cell: ({ row }) => {
       const variants = row.getValue("variants") as VariantsWithImagesTags[];
       return (
-        <div className="">
+        <div className="flex gap-2 items-center">
           {variants.map((variant) => (
             <div key={variant.id}>
               <TooltipProvider>

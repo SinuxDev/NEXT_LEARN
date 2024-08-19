@@ -26,6 +26,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { InputTags } from "./input-tags";
 import VariantImages from "./variant-images";
+import { useAction } from "next-safe-action/hooks";
+import { createVariant } from "@/server/dashboard/create-variant";
+import { toast } from "sonner";
+import { useEffect, useState } from "react";
 
 export const ProductVariant = ({
   editMode,
@@ -52,12 +56,61 @@ export const ProductVariant = ({
     mode: "onChange",
   });
 
+  const setEdit = () => {
+    if (!editMode) {
+      form.reset();
+      return;
+    }
+
+    if (editMode && variant) {
+      form.setValue("editMode", true);
+      form.setValue("id", variant.id);
+      form.setValue("productID", variant.productID);
+      form.setValue("productType", variant.productType);
+      form.setValue(
+        "tags",
+        variant.variantTags.map((tag) => tag.tag)
+      );
+      form.setValue(
+        "variantImages",
+        variant.variantImages.map((img) => ({
+          name: img.name,
+          size: img.size,
+          url: img.url,
+        }))
+      );
+      form.setValue("color", variant.color);
+    }
+  };
+
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setEdit();
+  }, []);
+
+  const { execute } = useAction(createVariant, {
+    onExecute() {
+      toast.loading("Creating variant...", { duration: 500 });
+      setOpen(false);
+    },
+    onSuccess(data) {
+      if (data.data?.success) {
+        toast.success(data.data.success, { duration: 500 });
+      }
+
+      if (data.data?.error) {
+        toast.error(data.data.error, { duration: 500 });
+      }
+    },
+  });
+
   function onSubmit(values: z.infer<typeof VariantSchema>) {
-    console.log(values);
+    execute(values);
   }
 
   return (
-    <Dialog modal={false}>
+    <Dialog modal={false} open={open} onOpenChange={setOpen}>
       <DialogTrigger> {children} </DialogTrigger>
       <DialogContent className="lg:max-w-screen-lg overflow-y-scroll max-h-[620px] rounded-md">
         <DialogHeader>
@@ -114,16 +167,22 @@ export const ProductVariant = ({
               )}
             />
             <VariantImages />
-            {editMode && variant && (
-              <Button type="button" onClick={(e) => e.preventDefault()}>
+            <div className="flex gap-4 items-center justify-center">
+              {editMode && variant && (
+                <Button
+                  variant={"destructive"}
+                  type="button"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  {" "}
+                  Remove Variant{" "}
+                </Button>
+              )}
+              <Button type="submit">
                 {" "}
-                Remove Variant{" "}
+                {editMode ? "Update Variant" : "Create Variant"}{" "}
               </Button>
-            )}
-            <Button type="submit">
-              {" "}
-              {editMode ? "Update Variant" : "Create Variant"}{" "}
-            </Button>
+            </div>
           </form>
         </Form>
       </DialogContent>
