@@ -90,7 +90,7 @@ export const ProductVariant = ({
     setEdit();
   }, []);
 
-  const { execute } = useAction(createVariant, {
+  const { execute, status } = useAction(createVariant, {
     onExecute() {
       toast.loading("Creating variant...", { duration: 500 });
       setOpen(false);
@@ -189,6 +189,7 @@ export const ProductVariant = ({
                 <Button
                   variant={"destructive"}
                   type="button"
+                  disabled={variantAction.status === "executing"}
                   onClick={(e) => {
                     e.preventDefault();
                     variantAction.execute({ id: variant.id });
@@ -198,7 +199,7 @@ export const ProductVariant = ({
                   Remove Variant{" "}
                 </Button>
               )}
-              <Button type="submit">
+              <Button disabled={status === "executing"} type="submit">
                 {" "}
                 {editMode ? "Update Variant" : "Create Variant"}{" "}
               </Button>
