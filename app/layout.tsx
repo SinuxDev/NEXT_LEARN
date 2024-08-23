@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
-import { Inter as FontSans } from "next/font/google";
+import { Inter as FontSans, Roboto } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Nav from "@/components/navigation/nav";
 import { ThemeProvider } from "@/components/theme-provider";
 import Toaster from "@/components/dashboard/sooner-toast";
 
-const fontSans = FontSans({ subsets: ["latin"], variable: "--font-sans" });
+const roboto = Roboto({
+  weight: ["400", "500", "700", "900"],
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Sample Next.js App",
@@ -15,28 +18,24 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  profile,
 }: Readonly<{
   children: React.ReactNode;
   profile: React.ReactNode;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          "px-6 md:px-24 max-w-7xl mx-auto font-sans antialiased",
-          fontSans.variable
-        )}
-      >
+      <body className={roboto.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
-          <Nav />
-          <Toaster />
-          {children}
+          <div className="flex-grow px-6 md:px-12 mx-auto max-w-6xl">
+            <Nav />
+            <Toaster />
+            {children}
+          </div>
         </ThemeProvider>
       </body>
     </html>

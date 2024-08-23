@@ -127,7 +127,7 @@ export const ProductVariant = ({
   }
 
   return (
-    <Dialog modal={false} open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger> {children} </DialogTrigger>
       <DialogContent className="lg:max-w-screen-lg overflow-y-scroll max-h-[620px] rounded-md">
         <DialogHeader>
