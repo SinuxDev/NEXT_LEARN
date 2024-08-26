@@ -100,3 +100,13 @@ export const VariantSchema = z.object({
     )
     .min(1, { message: "You must provide at least one image" }),
 });
+
+export const ReviewSchema = z.object({
+  rating: z
+    .number()
+    .min(1, { message: "Rate at least one star" })
+    .max(5, { message: "Rate at most 5 stars" }),
+  comment: z
+    .string()
+    .min(10, { message: "Comment must be at least 10 characters long" }),
+});
