@@ -85,6 +85,34 @@
       "when": 1723816711168,
       "tag": "0011_first_may_parker",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1724701931589,
+      "tag": "0012_demonic_virginia_dare",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1724702493978,
+      "tag": "0013_naive_kingpin",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1724702808953,
+      "tag": "0014_overrated_swordsman",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1724703120824,
+      "tag": "0015_curvy_doctor_octopus",
+      "breakpoints": true
     }
   ]
 }

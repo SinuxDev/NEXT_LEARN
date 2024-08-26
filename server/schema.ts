@@ -1,5 +1,6 @@
 import {
   boolean,
+  index,
   integer,
   pgEnum,
   pgTable,
@@ -147,6 +148,7 @@ export const VariantsTags = pgTable("tags_variants", {
 
 export const productRelations = relations(products, ({ many }) => ({
   productVariants: many(productVariants, { relationName: "product_variants" }),
+  reviews: many(reviews, { relationName: "reviews" }),
 }));
 
 export const productVariantsRelations = relations(
@@ -176,4 +178,43 @@ export const VariantTagsRealations = relations(VariantsTags, ({ one }) => ({
     references: [productVariants.id],
     relationName: "tags_variants",
   }),
+}));
+
+export const reviews = pgTable(
+  "reviews",
+  {
+    id: serial("id").primaryKey(),
+    rating: real("rating").notNull(),
+    userID: text("userID")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    productID: serial("productID")
+      .notNull()
+      .references(() => products.id, { onDelete: "cascade" }),
+    comment: text("comment").notNull(),
+    created: timestamp("created").defaultNow(),
+  },
+  (table) => {
+    return {
+      productIdx: index("productIdx").on(table.productID),
+      userIdx: index("userIdx").on(table.userID),
+    };
+  }
+);
+
+export const reviewRelations = relations(reviews, ({ one }) => ({
+  user: one(users, {
+    fields: [reviews.userID],
+    references: [users.id],
+    relationName: "user_reviews",
+  }),
+  product: one(products, {
+    fields: [reviews.productID],
+    references: [products.id],
+    relationName: "reviews",
+  }),
+}));
+
+export const userRelations = relations(users, ({ many }) => ({
+  reviews: many(reviews, { relationName: "user_reviews" }),
 }));
