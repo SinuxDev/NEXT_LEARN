@@ -102,6 +102,7 @@ export const VariantSchema = z.object({
 });
 
 export const ReviewSchema = z.object({
+  productID: z.number(),
   rating: z
     .number()
     .min(1, { message: "Rate at least one star" })
