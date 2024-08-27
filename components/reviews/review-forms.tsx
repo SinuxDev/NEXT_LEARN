@@ -17,6 +17,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useSearchParams } from "next/navigation";
@@ -26,17 +27,42 @@ import { Textarea } from "../ui/textarea";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAction } from "next-safe-action/hooks";
+import { addReview } from "@/server/actions/add-reviews";
+import { toast } from "sonner";
 
 export default function ReviewsForms() {
   const params = useSearchParams();
-  const productId = Number(params.get("productId"));
+  const productID = Number(params.get("productID"));
 
   const form = useForm<z.infer<typeof ReviewSchema>>({
     resolver: zodResolver(ReviewSchema),
+    defaultValues: {
+      rating: 0,
+      comment: "",
+      productID,
+    },
+  });
+
+  const { execute, status } = useAction(addReview, {
+    onSuccess(data) {
+      if (data.data?.error) {
+        toast.error(data.data.error);
+      }
+
+      if (data.data?.success) {
+        toast.success("Review added successfully");
+        form.reset();
+      }
+    },
   });
 
   function onSubmit(values: z.infer<typeof ReviewSchema>) {
-    console.log(values);
+    execute({
+      comment: values.comment,
+      rating: values.rating,
+      productID,
+    });
   }
 
   return (
@@ -63,6 +89,7 @@ export default function ReviewsForms() {
                       placeholder="How would you describle this product?"
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -93,12 +120,13 @@ export default function ReviewsForms() {
                             key={star}
                             onClick={() => {
                               form.setValue("rating", star);
+                              shouldValidate: true;
                             }}
                             className={cn(
                               "text-primary bg-transparent transition-all duration-300 ease-in-out",
                               form.getValues("rating") >= star
-                                ? "text-primary"
-                                : "text-muted"
+                                ? "fill-primary"
+                                : "fill-muted"
                             )}
                           />
                         </motion.div>
@@ -108,8 +136,12 @@ export default function ReviewsForms() {
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">
-              Submit Review
+            <Button
+              className="w-full"
+              type="submit"
+              disabled={status === "executing"}
+            >
+              {status === "executing" ? "Adding review..." : "Add Review"}
             </Button>
           </form>
         </Form>
