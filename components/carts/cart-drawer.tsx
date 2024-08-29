@@ -10,6 +10,7 @@ import {
 } from "../ui/drawer";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
+import CartItems from "./cart-items";
 
 export default function CartDrawer() {
   const { cart } = useCartStore();
@@ -37,6 +38,7 @@ export default function CartDrawer() {
         <DrawerHeader>
           <h1>Cart stuff</h1>
         </DrawerHeader>
+        <CartItems />
       </DrawerContent>
     </Drawer>
   );
