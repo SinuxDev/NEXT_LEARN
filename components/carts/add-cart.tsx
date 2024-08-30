@@ -55,7 +55,7 @@ export default function AddCart() {
           addToCart({
             id: productID,
             variant: { variantID: id, quantity },
-            name: title + type,
+            name: title + " " + type,
             price,
             image,
           });
