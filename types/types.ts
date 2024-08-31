@@ -111,3 +111,17 @@ export const ReviewSchema = z.object({
     .string()
     .min(10, { message: "Comment must be at least 10 characters long" }),
 });
+
+export const PaymentIntentSchema = z.object({
+  amount: z.number().positive(),
+  currency: z.string(),
+  cart: z.array(
+    z.object({
+      quantity: z.number().positive(),
+      productID: z.number(),
+      title: z.string(),
+      price: z.number().positive(),
+      image: z.string(),
+    })
+  ),
+});
