@@ -11,5 +11,6 @@ export default defineConfig({
   dialect: "postgresql", // 'postgresql' | 'mysql' | 'sqlite'
   dbCredentials: {
     url: process.env.POSTGRES_URL!,
+    ssl: false,
   },
 });
