@@ -27,6 +27,7 @@ export const users = pgTable("user", {
   password: text("password"),
   twoFactorEnabled: boolean("twoFactorEnabled").default(false),
   role: RoleEnum("roles").default("user"),
+  customerID: text("customerID"),
 });
 
 export const accounts = pgTable(
@@ -260,5 +261,15 @@ export const orderProductRelations = relations(orderProduct, ({ one }) => ({
     fields: [orderProduct.orderID],
     references: [orders.id],
     relationName: "orderProduct",
+  }),
+  product: one(products, {
+    fields: [orderProduct.productID],
+    references: [products.id],
+    relationName: "products",
+  }),
+  productVariant: one(productVariants, {
+    fields: [orderProduct.productVariantID],
+    references: [productVariants.id],
+    relationName: "product_variants",
   }),
 }));
