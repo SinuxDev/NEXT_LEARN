@@ -8,6 +8,7 @@ import { LoginSchema } from "@/types/types";
 import { eq } from "drizzle-orm";
 import { accounts, users } from "./schema";
 import bcrypt from "bcrypt";
+import Stripe from "stripe";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
@@ -15,6 +16,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,
+  },
+  events: {
+    createUser: async ({ user }) => {
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+        apiVersion: "2024-06-20",
+      });
+      const customer = await stripe.customers.create({
+        email: user.email!,
+        name: user.name!,
+      });
+      await db
+        .update(users)
+        .set({ customerID: customer.id })
+        .where(eq(users.id, user.id!));
+    },
   },
   callbacks: {
     async session({ session, token }) {
