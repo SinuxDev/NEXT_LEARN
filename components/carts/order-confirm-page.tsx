@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { revalidatePath } from "next/cache";
 
 export default function OrderConfirm() {
-  const { setCheckoutProgress } = useCartStore();
+  const { setCheckoutProgress, setCartOpen } = useCartStore();
   return (
     <div className="flex flex-col items-center gap-4">
       <h2 className="text-xl font-medium">Thank you for your Purchase</h2>
@@ -17,7 +17,7 @@ export default function OrderConfirm() {
         <Button
           onClick={() => {
             setCheckoutProgress("cart-page");
-            revalidatePath("/dashboard/orders");
+            setCartOpen(false);
           }}
         >
           View your order
