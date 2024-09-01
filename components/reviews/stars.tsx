@@ -22,11 +22,12 @@ export default function Stars({ rating, totalReviews, size = 14 }: StarsProps) {
           size={size}
         />
       ))}
-      {totalReviews && (
+
+      {totalReviews ? (
         <span className="text-secondary-foreground font-bold text-sm ml-2">
           {totalReviews} reviews
         </span>
-      )}
+      ) : null}
     </div>
   );
 }

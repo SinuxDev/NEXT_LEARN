@@ -12,9 +12,19 @@ export default function OrderConfirm() {
   const { setCheckoutProgress, setCartOpen } = useCartStore();
   return (
     <div className="flex flex-col items-center gap-4">
+      <motion.div
+        animate={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, scale: 0 }}
+        transition={{ delay: 0.35 }}
+      >
+        <Lottie className="h-56 my-4" animationData={orderConfirm} />
+      </motion.div>
+
       <h2 className="text-xl font-medium">Thank you for your Purchase</h2>
+
       <Link href={"/dashboard/orders"}>
         <Button
+          variant={"secondary"}
           onClick={() => {
             setCheckoutProgress("cart-page");
             setCartOpen(false);
@@ -23,13 +33,6 @@ export default function OrderConfirm() {
           View your order
         </Button>
       </Link>
-      <motion.div
-        animate={{ opacity: 1, scale: 1 }}
-        initial={{ opacity: 0, scale: 0 }}
-        transition={{ delay: 0.35 }}
-      >
-        <Lottie className="h-48 my-4" animationData={orderConfirm} />
-      </motion.div>
     </div>
   );
 }
