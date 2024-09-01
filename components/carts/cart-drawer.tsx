@@ -13,9 +13,10 @@ import { motion } from "framer-motion";
 import CartItems from "./cart-items";
 import CartMessage from "./cart-message";
 import Payment from "./payment";
+import OrderConfirm from "./order-confirm-page";
 
 export default function CartDrawer() {
-  const { cart, checkoutProgress, setCheckoutProgress } = useCartStore();
+  const { cart, checkoutProgress } = useCartStore();
   return (
     <Drawer>
       <DrawerTrigger>
@@ -43,16 +44,7 @@ export default function CartDrawer() {
         <div className="overflow-auto p-4">
           {checkoutProgress === "cart-page" && <CartItems />}
           {checkoutProgress === "payment-page" && <Payment />}
-          {checkoutProgress === "confirmation-page" && (
-            <div
-              onClick={() => {
-                setCheckoutProgress("cart-page");
-              }}
-              className="cursor-pointer text-primary"
-            >
-              Confirmation
-            </div>
-          )}
+          {checkoutProgress === "confirmation-page" && <OrderConfirm />}
         </div>
       </DrawerContent>
     </Drawer>
