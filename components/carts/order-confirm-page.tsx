@@ -3,10 +3,9 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { useCartStore } from "@/lib/client-store";
-import orderConfirm from "@/public/Animation-json/oder-confirmed.json";
+import orderConfirm from "@/public/Animation-json/AnimationOrderConfirmation.json";
 import Lottie from "lottie-react";
 import { motion } from "framer-motion";
-import { revalidatePath } from "next/cache";
 
 export default function OrderConfirm() {
   const { setCheckoutProgress, setCartOpen } = useCartStore();
