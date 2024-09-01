@@ -155,6 +155,20 @@
       "when": 1725124351624,
       "tag": "0021_big_maria_hill",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1725216645983,
+      "tag": "0022_true_glorian",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1725216714919,
+      "tag": "0023_high_baron_zemo",
+      "breakpoints": true
     }
   ]
 }

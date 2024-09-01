@@ -231,6 +231,7 @@ export const orders = pgTable("orders", {
   status: text("status").notNull(),
   created: timestamp("created").defaultNow(),
   receiptURL: text("receiptURL"),
+  paymentIntentID: text("paymentIntentID"),
 });
 
 export const ordersRelations = relations(orders, ({ one, many }) => ({
@@ -251,7 +252,7 @@ export const orderProduct = pgTable("orderProduct", {
   productID: serial("productID")
     .notNull()
     .references(() => products.id, { onDelete: "cascade" }),
-  orderID: integer("orderID")
+  orderID: serial("orderID")
     .notNull()
     .references(() => orders.id, { onDelete: "cascade" }),
 });

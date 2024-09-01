@@ -129,6 +129,7 @@ export const PaymentIntentSchema = z.object({
 export const OrderSchema = z.object({
   total: z.number().positive(),
   status: z.string(),
+  paymentIntentID: z.string(),
   products: z.array(
     z.object({
       productID: z.number(),
