@@ -39,6 +39,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 export default async function OrdersPage() {
   const user = await auth();
@@ -92,8 +94,8 @@ export default async function OrdersPage() {
                   <Badge
                     className={
                       order.status === "succeeded"
-                        ? "bg-green-700"
-                        : "bg-secondary-foreground"
+                        ? "bg-green-700 hover:bg-green-800"
+                        : "bg-yellow-700 hover:bg-yellow-800"
                     }
                   >
                     {order.status}
@@ -124,12 +126,41 @@ export default async function OrdersPage() {
                             </Button>
                           </DialogTrigger>
                         </DropdownMenuItem>
+
+                        {order.receiptURL && (
+                          <DropdownMenuItem>
+                            <Button
+                              className="w-full"
+                              variant={"ghost"}
+                              asChild
+                            >
+                              <Link href={order.receiptURL} target={"_blank"}>
+                                Download Receipt
+                              </Link>
+                            </Button>
+                          </DropdownMenuItem>
+                        )}
                       </DropdownMenuContent>
                     </DropdownMenu>
 
-                    <DialogContent>
+                    <DialogContent className="rounded-md">
                       <DialogHeader>
                         <DialogTitle>Order Details No - {order.id}</DialogTitle>
+                        {order.created && (
+                          <DialogDescription>
+                            Order placed on{" "}
+                            {formatDistance(
+                              subMinutes(order.created, 0),
+                              new Date(),
+                              {
+                                addSuffix: true,
+                              }
+                            )}
+                          </DialogDescription>
+                        )}
+                        <DialogDescription>
+                          Total: ${order.total}
+                        </DialogDescription>
                       </DialogHeader>
 
                       <Card className="overflow-auto p-2 flex flex-col gap-4">
