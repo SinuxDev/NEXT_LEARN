@@ -20,7 +20,7 @@ import userPlaceHolderImage from "@/public/imagePlaceholder.png";
 
 export default function Sales({ totalOrders }: { totalOrders: TotalOrders[] }) {
   return (
-    <Card>
+    <Card className="flex-1 shrink-0">
       <CardHeader>
         <CardTitle>New Sales</CardTitle>
         <CardDescription>Check your recent sales</CardDescription>
@@ -41,7 +41,7 @@ export default function Sales({ totalOrders }: { totalOrders: TotalOrders[] }) {
               <TableRow className="font-medium" key={order.id}>
                 <TableCell>
                   {order.user.image && order.user.name ? (
-                    <div className="flex gap-2 items-center">
+                    <div className="flex gap-2 w-32 items-center">
                       <Image
                         src={order.user.image}
                         width={25}
